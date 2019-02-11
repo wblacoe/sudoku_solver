@@ -45,9 +45,9 @@ class Cell:
     def set_number(self, number, comment):
 
         if self.is_solved:
-            print("(" + comment + ": setting cell (" + str(self.board_x) + "," + str(self.board_y) + ") to number " + str(number) + ")")
+            print("(" + comment + ": setting cell (" + str(self.board_x + 1) + "," + str(self.board_y + 1) + ") to number " + str(number) + ")")
         else:
-            print(comment + ": setting cell (" + str(self.board_x) + "," + str(self.board_y) + ") to number " + str(number))
+            print(comment + ": setting cell (" + str(self.board_x + 1) + "," + str(self.board_y + 1) + ") to number " + str(number))
 
         # conflict: this cell is already set to a different number!
         if self.is_solved and self.get_number() != number:
