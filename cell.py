@@ -47,7 +47,7 @@ class Cell:
         #if self.is_solved:
             #print("(" + comment + ": setting cell (" + str(self.board_x + 1) + "," + str(self.board_y + 1) + ") to number " + str(number) + ")")
         #else:
-		if not self.is_solved:
+        if not self.is_solved:
             print(comment + ": setting cell (" + str(self.board_x + 1) + "," + str(self.board_y + 1) + ") to number " + str(number))
 
         # conflict: this cell is already set to a different number!

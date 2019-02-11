@@ -2,11 +2,13 @@ import cell
 import block
 import pool
 import random
-
+from datetime import datetime
 
 class Board:
 
     def __init__(self):
+        random.seed(datetime.now())
+      
         self.solution_pool = pool.Pool()
 
         self.all_cells = []
@@ -109,7 +111,7 @@ class Board:
                     break
                 self.guess_one_cell()
             except Exception as e:
-                print(str(e))
+                print(str(e.args[0]))
                 self.reset(False)
         print("Solved sudoku with " + str(self.amount_of_resets) + " reset(s) and " + str(self.amount_of_guesses) + " guess(es) (in the final pass)")
 
@@ -126,7 +128,10 @@ class Board:
                 c.reset()
 
         self.amount_of_guesses = 0
-        self.amount_of_resets += 1
+        if clear_init_queue:
+            self.amount_of_resets = 0
+        else:
+            self.amount_of_resets += 1
 
     def __repr__(self):
         s = ""
