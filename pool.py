@@ -7,8 +7,9 @@ class Pool:
         self.later_queue = []  # contains triplets (cell, number, comment)
         self.later_index = 0
 
-    def reset(self):
-        self.init_queue = []
+    def reset(self, clear_init_queue):
+        if(clear_init_queue):
+            self.init_queue = []
         self.init_index = 0
         self.later_queue = []
         self.later_index = 0

@@ -56,12 +56,11 @@ class Board:
 
     def is_solved(self):
         return self.get_amount_of_solved_cells() == 81
-
+        
     def add_solution(self, cell_to_be_solved, number, type_of_solution):
         self.solution_pool.add_triplet((cell_to_be_solved, number, type_of_solution))
 
     def add_solutions(self, triplets_as_string):
-        print("Setting values as given by '" + triplets_as_string + "'...")
         triplets = triplets_as_string.split(", ")
         for triplet in triplets:
             entries = triplet.split(" ")
@@ -70,8 +69,8 @@ class Board:
                 y = int(entries[1]) - 1
                 number = int(entries[2])
             except ValueError:
-                print("Invalid triplet(s). Each triplet must consist of 3 numbers from 1 to 9.")
-                print("The following example puts an 8 in the top right corner and a 7 in the center of the board: 9 1 8, 5 5 7")
+                print("Invalid input! If you are trying to set values on the board your input needs to be a (comma-separated) list of triplets 'x y number' where x, y and number must be numbers from 1 to 9.")
+                print("The following example would put an 8 in the top right corner and a 7 in the center of the board: 9 1 8, 5 5 7")
                 break
             self.add_solution(self.get_cell(x, y), number, "INIT")
 
@@ -79,24 +78,27 @@ class Board:
         return self.solution_pool.execute_next_triple()
 
     def guess_one_cell(self):
-        self.amount_of_guesses += 1
-
-        # collect all unsolved cells
-        unsolved_cells = []
-        for y in range(9):
-            for x in range(9):
-                c = self.all_cells[y][x]
-                if not c.is_solved:
-                    unsolved_cells.append(c)
-
-        # pick a random unsolved cells
-        random_unsolved_cell = random.choice(unsolved_cells)
-
-        # pick a random possible number for this cell
-        random_possible_number = random.choice(random_unsolved_cell.possible_numbers)
-
-        # use these as guessed solution
-        self.solution_pool.add_triplet((random_unsolved_cell, random_possible_number, "GUESS"))
+        if self.is_solved():
+            print("Sudoku is already solved.")
+        else:
+            self.amount_of_guesses += 1
+        
+            # collect all unsolved cells
+            unsolved_cells = []
+            for y in range(9):
+                for x in range(9):
+                    c = self.all_cells[y][x]
+                    if not c.is_solved:
+                        unsolved_cells.append(c)
+    
+            # pick a random unsolved cells
+            random_unsolved_cell = random.choice(unsolved_cells)
+    
+            # pick a random possible number for this cell
+            random_possible_number = random.choice(random_unsolved_cell.possible_numbers)
+    
+            # use these as guessed solution
+            self.solution_pool.add_triplet((random_unsolved_cell, random_possible_number, "GUESS"))
 
     def solve_sudoku(self):
         while True:
@@ -108,11 +110,11 @@ class Board:
                 self.guess_one_cell()
             except Exception as e:
                 print(str(e))
-                self.reset()
+                self.reset(False)
         print("Solved sudoku with " + str(self.amount_of_resets) + " reset(s) and " + str(self.amount_of_guesses) + " guess(es) (in the final pass)")
 
-    def reset(self):
-        self.solution_pool.reset()
+    def reset(self, clear_init_queue):
+        self.solution_pool.reset(clear_init_queue)
 
         for i in range(9):
             self.row_blocks[i].reset()
